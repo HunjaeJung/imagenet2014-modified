@@ -3,6 +3,10 @@ imagenet 2014
 
 term projects for computer vision course in SNU, 2015.
 
+# Todo
+
+- Need to survey about object localization
+
 # papers
 
 ### imagenet 우승팀 관련
@@ -29,15 +33,17 @@ term projects for computer vision course in SNU, 2015.
 - [tiny imagenet challenge, Stanford University CS231n](http://cs231n.stanford.edu/project.html)
 - [kamarain / ImageNet-tiny / wiki / Home — Bitbucket](https://bitbucket.org/kamarain/imagenet-tiny/wiki/Home#markdown-header-deep-neural-network-caffe)
 - [CIFAR-10 dataset](http://www.cs.toronto.edu/~kriz/cifar.html)
-	- 80 million tiny images dataset. 32x32 colour images in 10 classes, with 6000 images per class. (50000 training images and 10000 test images)
+  - 80 million tiny images dataset. 32x32 colour images in 10 classes, with 6000 images per class. (50000 training images and 10000 test images)
+  - it may be useful for fast experiment and fast feedback
 
 # any other links
 
 - [4190.429 15S computer vision](https://sites.google.com/a/vision.snu.ac.kr/4190429-15s/)
 - [convolution NN(cs231n)](http://cs231n.github.io/convolutional-networks/)
+  - there are list of tips of implementing CNN
 - [About deep learning(NVIDIA)](https://developer.nvidia.com/deep-learning)
 - [Hacker's guide to Neural Networks](http://karpathy.github.io/neuralnets/)
-	- 필자가 이걸 적은 다음, cs231 강의 노트를 만듬
+  - 필자가 이걸 적은 다음, cs231 강의 노트를 만듬
 - [\[Nature of Code\] Chap 10. Neural Network](http://natureofcode.com/book/chapter-10-neural-networks/)
 
 # related video
