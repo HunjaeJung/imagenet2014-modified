@@ -25,22 +25,17 @@
 \begin{document}
 
 %%%%%%%%% TITLE
-\title{A Dynamic Approach to ImageNet Competition Challenge}
+\title{ImageNet Large Scale Visual Recognition Challenge}
 
-\author{beomjun shin\\
+\author{Beomjun Shin\\
 Industrial Engineering\\
 {\tt\small lucidus21@gmail.com}
-% For a paper whose authors are all at the same institution,
-% omit the following lines up until the closing ``}''.
-% Additional authors and addresses can be added with ``\and'',
-% just like the second author.
-% To save space, use either the email address or home page, not both
 \and
-hunjae jung\\
-Computer Science, mathematics\\
+Hunjae Jung\\
+Computer Science, Mathematics\\
 {\tt\small hunjaeme@gmail.com}
 \and
-youngjin kim\\
+Youngjin Kim\\
 Mechanical Engineering\\
 {\tt\small youngj0908@gmail.com}
 }
@@ -64,22 +59,81 @@ And based on this project experience, we hope we could challenge on ImageNet 201
 %-------------------------------------------------------------------------
 \section{Team Members}
 
-List up your team members, and (planned) role of each member
+Beomjun shin will setup development enviroment(setup CUDA, caffe on GPU computer) and build CNN code from Caffe and manipulate, experiment it.
+Hunjae jung will mainly focused on object detection algorithm by Computer Vision technique and so on.
+And he will connect our model for useful application for our project(demo!).
+Youngjin kim will implement various data preprocessing, postprocessing techniques for squeezing out last few percent and visulize our network's layer.
+It is our main role but we use github for check each other's code, surveyed paper and so on.
+Our whole project progress will be logged by git.
 
 \section{Problem}
 
-\section{References}
+In this project, we would like to challenge previous ImageNet Large Scale Visual Recognition Challenge(ILSVRC) 2014 competition by using deep learning techniques.
+The ILSVRC is a benchmark in object category classification and detection on hundreds of object categories and millions of images and This competition is one of the largest and the most challenging computer vision challenge.
+In this competition, there were 3 tasks which are (1) image classification, (2) singe-object localization, and (3) several objects detection.
+In Image classification task, there are training data, the subset of ImageNet containing the 1000 categories and 1.2 million images.
+And we have to suggest algorithms which produce a list of object categories present in the image.
+The single-object localization task is to evaluate the ability of algorithms to learn the appearance of the target object itself rather than its image context.
+And training data for the single-object detection consists of same photographs collected for image classification task but it is hand labeled with the precense of one of 1000 object categories.
+In our project, we will target (1) image classification and (2) single-object localization tasks.
+We hope to implement various ConvNet models for first task and use various CV techniques for second tasks.
 
 \section{Methods}
 
+To solve these problems, we would mainly focus on Convolutional Neural Network(CNN) for classification and object detection.
+In object detection tasks, there are various methods but we will choose methods which use CV techniques and not consume a lot of times.
+In first experiment, we will experiment with winning method of 2014 ILSVRC which use per-class bounding box regression.
+We mainly use Caffe, which is deep learning framework, let us do fast experiment with CNN.
+Caffe already contains AlexNet, GoogleNet, R-CNN.
+
+\section{DataSet}
+
+We will use two dataset,in terms of scale, original ILSVRC ImageNet data(170GB), Tiny imageNet dataset(239MB).
+
+The training data, the subset of ImageNet containing the 1000 categories and 1.2 million images.
+The validation and test data for this competition will consist of 150,000 photographs, collected from flickr and other search engines, hand labeled with the presence or absence of 1000 object categories.
+The 1000 object categories do not overlap with each other.
+The validation and test data for this competition are not contained in the ImageNet training data (we will remove any duplicates).
+
+But ILSVRC dataset is so big for our computation enviroment.
+So for fast feedback, we will also use tiny imageNet dataset from CS231n course.
+It has 200 classes containing 500 training images.
+The validation and test data consist of 10000 photographs for each.
+
 \section{Evaluation}
 
+We will follow evaluation rule of ILSVRC 2012.
+For Classification Task, For each image, algorithms will produce a list of top-5 object categories in the descending order of confidence.
+The quality of a labeling will be evaluated based on the label that best matches the ground truth label for the image.
 
-List and number all bibliographical references in 9-point Times,
-single-spaced, at the end of your paper. When referenced in the text,
-enclose the citation number in square brackets, for
-example~\cite{Authors14}.  Where appropriate, include the name(s) of
-editors of referenced books.
+\begin{align*}
+error &= \frac {1} {N} \sum_{i=1}^{N} {\min_{h} {d_{ij}}} \\
+d_{ij} &= 1 \quad\quad \text{if}\quad c_{ij} \neq C_i \\
+\end{align*}
+
+The evaluation of single-object localization is similar to object classification, again using a top-5 criteria.
+But now algorithm is considered correct only if it both correctly identifies the target class $C_i$ and accurately localizes one of its instance.
+
+\begin{align*}
+d_{ij} = max(d(c_{ij}, C_{i}), \min_{k}d(b_{ij}, B_{ik}))
+\end{align*}
+
+Above equation means The predicted bounding box overlaps over 50\% with the ground truth bounding box, or in the case of multiple instances of the same class, with any of the ground truth bounding boxes) otherwise the error is 1(maximum).
+
+\section{References}
+
+We first learn about dataset and previous winning methods of ILSVRC15 paper. \cite{ILSVRC15}
+And we historically follow winning team methods starting with ILSVRC 2012 winner AlexNet. \cite{AlexNet}
+Because of Alex Krizhevsky's approach, ILSVRC 2012 is turning point for large-scale object recognition, when large-scale deep neural networks entered the scene.
+The ILSVRC 2013 winner team was from Matthew Zeiler and Rob Fergus.
+And It became known as the ZF Net.\cite{ZFNet} So we will basically review this model.
+The latest(2014) winning team of classification tasks is from Szegedy et al. from Google which known as GoogleNet. \cite{GoogleNet}
+How and Why they build GoogleNet architecture is a really hard but it is implemented in Caffe, so when time allows we test this state of art model in this project.
+And same year, winning team of object localization was VGGNet. \cite{VGGNet}
+They use a lot more memory and parameters(140M compared to AlexNet 40M) but they explore the effect of convolutional neural network depth on its accuracy.
+So it gives us more intuition of CNN.
+We also check famous LeNet \cite{LeNet} which is the first successful applications of convolutional network.
+Nowadays, there are so many papers about CNN in image classification and object localization so we hope to check various methods and experiment with already well-made code bases.
 
 {\small
 \bibliographystyle{ieee}
