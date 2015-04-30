@@ -65,6 +65,23 @@ url = {http://papers.nips.cc/paper/4824-imagenet-classification-with-deep-convol
     year         = "2014"
 }
 
+@INCOLLECTION{LeNet,
+     author = {{LeCun}, Yann and Bottou, {L{\'{e}}on} and Bengio, Yoshua and Haffner, Patrick},
+     editor = {Haykin, S. and Kosko, B.},
+      title = {Gradient-Based Learning Applied to Document Recognition},
+  booktitle = {Intelligent Signal Processing},
+       year = {2001},
+      pages = {306--351},
+  publisher = {IEEE Press},
+        url = {http://www.iro.umontreal.ca/~lisa/pointeurs/lecun-01a.pdf},
+   abstract = {Multilayer Neural Networks trained with a backprppagation algorithm constitute the best example of a successful Gradient-Based Learning technique. Given an appropriate network architecture, Gradient-Based Learning algorithms can be used to synthesize a complex decision surface that can classify high-dimensional patterns such as handwritten characters, with minimal preprocessing. This paper reviews various methods applied to handwritten character recognition and compares them on a standard handwritten digit recognition task. Convolutional Neural Networks, that are specifically designed to deal with the variability of 2D shapes, are shown to outperform all other techniques.
+Real-life document recognition systems are composed of multiple modules including field extraction, segmentation, recognition, and language modeling. A new learning paradigm, called Graph Transformer Networks (GTN), allows such multi-module systems to be trained globally using Gradient-Based methods so as to monimize an overall peformance measure.
+Two systems for on-line handwriting recognition are described. Experiments demonstrate the advantage of global training, and the flexibility of Graph Transformer Networks.
+A Graph Transformer Network for reading bank check is also described. It uses Convolutional Neural Network character recognizers combined with a global training technique to provides record accuracy on business and personal checks. It is deployed commercially and reads several million checks per day.},
+topics={PriorKnowledge,Speech},cat={B},
+}
+
+
 book{Xbook,
     author    = "",
     title     = "",
@@ -123,12 +140,4 @@ misc{Xmisc,
     %year     = "XXXX",
     %month    = "",
     %note     = "",
-}
-
-@misc{CIFAR100 benchmark,
-    title     = "",
-    howpublished = "\url{http://rodrigob.github.io/are_we_there_yet/build/classification_datasets_results.html#43494641522d313030}",
-    year     = "XXXX",
-    month    = "",
-    note     = "",
 }

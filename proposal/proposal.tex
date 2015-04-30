@@ -1,4 +1,4 @@
-	\documentclass[10pt,twocolumn,letterpaper]{article}
+\documentclass[10pt,twocolumn,letterpaper]{article}
 
 \usepackage{cvpr}
 \usepackage{times}
@@ -21,7 +21,7 @@
 
 % Pages are numbered in submission mode, and unnumbered in camera-ready
 %\ifcvprfinal\pagestyle{empty}\fi
-\setcounter{page}{4321}
+\setcounter{page}{1}
 \begin{document}
 
 %%%%%%%%% TITLE
@@ -53,54 +53,53 @@ To solve these problems, we would mainly focus on the techniques called Convolut
 Caffe, which is deep learning framework, let us use CNN/RCNN easily and provides several API function for deep learning algorithms.
 When we success on image classification and object detection tasks, we would make simple application to show our works.
 When the user upload there own picture on the application, the application will provides related images depending on the result of image classification tasks.
-And based on this project experience, we hope we could challenge on ILSVRC 2016 competition or create a novel application by using this state-of-the-art performance.
+Based on this project experience, we hope we could challenge on ILSVRC 2016 competition.
+And we hope to create a novel approach making some breakthrough for current state-of-the-art performance.
 
 %-------------------------------------------------------------------------
 \section{Team Members}
 
 Beomjun Shin will setup development enviroment(setup CUDA, caffe on GPU computer) and build CNN code from Caffe and manipulate, experiment it.
+He bought GTX 980 GPU for this project.
 Hunjae Jung will mainly focused on object detection algorithm by Computer Vision technique and so on.
 And he will connect our model for useful application for our project(demo!).
 Youngjin Kim will implement various data preprocessing, postprocessing techniques for squeezing out last few percent and visulize our network's layer.
-It is our main role but we use Github for check each other's code, surveyed paper and so on.
+It is our main role but we use Github, so we could easily collaborate each other's code.
 Our whole project progress will be logged by git.
 
 \section{Problem}
 
-% 1??? ???? ?? ?????.
 And as we introduced above, ILSVRC 2014 competition set 3 problems: (1) image classification, (2) singe-object localization, and (3) several objects detection.
-% In this project, we would like to challenge previous ImageNet Large Scale Visual Recognition Challenge(ILSVRC) 2014 competition by using deep learning techniques.
-% The ILSVRC is a benchmark in object category classification and detection on hundreds of object categories and millions of images.
-% And this competition is one of the largest and the most challenging computer vision challenge.
-% In this competition, there were 3 tasks which were (1) image classification, (2) singe-object localization, and (3) several objects detection.
 In Image classification task, there are training data, the subset of ImageNet containing the 1000 categories and 1.2 million images.
-And we have to suggest algorithms which produce a list of object categories present in the image.
+And we have to suggest algorithms which produce a top-5 list of object categories present in the image.
 The single-object localization task is to evaluate the ability of algorithms to learn the appearance of the target object itself rather than its image context.
 And training data for the single-object detection consists of same photographs collected for image classification task but it is hand labeled with the presence of one of 1000 object categories.
 In our project, we will target (1) image classification and (2) single-object localization tasks.
-We hope to implement various ConvNet models for first task and use various CV techniques for second tasks.
+We hope to implement various CNN models for first task and use various CV techniques for second tasks.
 
 \section{Methods}
 
 To solve these problems, we would mainly focus on Convolutional Neural Network(CNN) for classification and object detection.
-In object detection tasks, there are various methods but we will choose methods which use CV techniques and not consume a lot of times.
-In first experiment, we will experiment with winning method of 2014 ILSVRC which use per-class bounding box regression.
-We mainly use Caffe, which is deep learning framework, let us do fast experiment with CNN.
+In object detection tasks, there are various methods so we will choose methods which use CV techniques and not consume a lot of times.
+In first experiment, we will start experiment with winning methods of 2014 ILSVRC(GoogleNet, R-CNN).
+GoogleNet will consume 1 week for training on good GPU, so we use small tiny imagenet dataset for first time.
+We mainly use Caffe, which is deep learning framework, let us do fast experiment with various winner team's CNN Models.
 Caffe already contains AlexNet, GoogleNet, R-CNN.
 
 \section{DataSet}
 
-We will use two dataset, in terms of scale, original ILSVRC ImageNet data(170GB), Tiny imageNet dataset(239MB).
+We will use two dataset, in terms of scale, original ILSVRC ImageNet data(170GB) and Tiny imageNet dataset(239MB).
 
 The training data, the subset of ImageNet containing the 1000 categories and 1.2 million images.
 The validation and test data for this competition will consist of 150,000 photographs, collected from flickr and other search engines, hand labeled with the presence or absence of 1000 object categories.
 The 1000 object categories do not overlap with each other.
-The validation and test data for this competition are not contained in the ImageNet training data (we will remove any duplicates).
+The validation and test data for this competition are not contained in the ImageNet training data.
 
 But ILSVRC dataset is so big for our computation enviroment.
 So for fast feedback, we will also use tiny imageNet dataset from CS231n course.
 It has 200 classes containing 500 training images.
 The validation and test data consist of 10000 photographs for each.
+This dataset is sampled from original ImageNet data so it is very suitable for our experiments.
 
 \section{Evaluation}
 
@@ -120,16 +119,16 @@ But now algorithm is considered correct only if it both correctly identifies the
 d_{ij} = max(d(c_{ij}, C_{i}), \min_{k}d(b_{ij}, B_{ik}))
 \end{align*}
 
-Above equation means The predicted bounding box overlaps over 50\% with the ground truth bounding box, or in the case of multiple instances of the same class, with any of the ground truth bounding boxes) otherwise the error is 1(maximum).
+Above equation means that the error will be the same as defined in task 1 if the localization is correct otherwise the error is 1.
 
 \section{Demo}
 
-Deep learning have powerful classification accuracy when it is trained by ImageNet.
+Our CNN Model will have powerful classification accuracy when it is trained by ImageNet.
 So we decided to apply our results to a new web application which recommends a bunch of related images from user's image.
 When user upload their own image, the application will extract top-5 keywords automatically from the image based on our model.
-By using that keywords and graph data structure, we will find out what kinds of images are related to the keywords.
+By using that keywords and with some simple heuristic methods, we will find out what kinds of images are related to the keywords.
 For example, instead of just searching images of 'moon', the app can recommend you more related images like sky, stars, or something.
-Consequentially, we could prepare to take for new small image search engine based on image input.
+Consequentially, we could draw some image graph on their own images.
 
 \section{References}
 
