@@ -3,7 +3,7 @@ SRCS:=$(shell find . -name "*.tex")
 
 DFFLAG=-xelatex -interaction=nonstopmode
 RFLAG=-quiet
-DFLAG=-pv
+#DFLAG=-pv
 
 debug:
 	$(LATEX) $(DFFLAG) $(DFLAG)
