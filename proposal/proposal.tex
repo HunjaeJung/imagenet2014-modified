@@ -33,7 +33,7 @@ Industrial Engineering\\
 \and
 Hunjae Jung\\
 Computer Science, Mathematics\\
-{\tt\small hunjaeme@gmail.com}
+{\tt\small hunjaege@gmail.com}
 \and
 Youngjin Kim\\
 Mechanical Engineering\\
@@ -46,35 +46,37 @@ Mechanical Engineering\\
 %%%%%%%%% BODY TEXT
 \section{Introduction}
 
-In this project, we would like to challenge previous ImageNet 2014 competition by using deep learning framework called Caffe.
-ImageNet 2014 competition is one of the largest and the most challenging computer vision challenge.
-In this competition, there were 3 problems which are (1) image classification, (2) object detection, and (3) several objects detection.
-To solve these problems, we would mainly focus on the techniques called Convolutional Neural Network(CNN) for classification, Regions with Convolutional Neural Network(RCNN) for object detection, and several computer vision skills what we?ve learned in class to optimize our algorithm.
+In this project, we would like to challenge previous ImageNet Large Scale Visual Recognition Challenge(ILSVRC) 2014 by using deep learning framework called Caffe.
+ILSVRC, which is one of the largest and most challenging computer vision challenge, is a benchmark in object category classification and detection on hundreds of object categories and millions of images.
+In this competition, there were 3 problems which were (1) image classification, (2) object detection, and (3) several objects detection.
+To solve these problems, we would mainly focus on the techniques called Convolutional Neural Network(CNN) for classification, Regions with Convolutional Neural Network(RCNN) for object detection, and several computer vision skills what we've learned in class to optimize our algorithm.
 Caffe, which is deep learning framework, let us use CNN/RCNN easily and provides several API function for deep learning algorithms.
 When we success on image classification and object detection tasks, we would make simple application to show our works.
 When the user upload there own picture on the application, the application will provides related images depending on the result of image classification tasks.
-And based on this project experience, we hope we could challenge on ImageNet 2016 competition or create a novel application by using this state-of-the-art performance.
-\LaTeX\ Tiny ImageNet Challenge
+And based on this project experience, we hope we could challenge on ILSVRC 2016 competition or create a novel application by using this state-of-the-art performance.
 
 %-------------------------------------------------------------------------
 \section{Team Members}
 
-Beomjun shin will setup development enviroment(setup CUDA, caffe on GPU computer) and build CNN code from Caffe and manipulate, experiment it.
-Hunjae jung will mainly focused on object detection algorithm by Computer Vision technique and so on.
+Beomjun Shin will setup development enviroment(setup CUDA, caffe on GPU computer) and build CNN code from Caffe and manipulate, experiment it.
+Hunjae Jung will mainly focused on object detection algorithm by Computer Vision technique and so on.
 And he will connect our model for useful application for our project(demo!).
-Youngjin kim will implement various data preprocessing, postprocessing techniques for squeezing out last few percent and visulize our network's layer.
-It is our main role but we use github for check each other's code, surveyed paper and so on.
+Youngjin Kim will implement various data preprocessing, postprocessing techniques for squeezing out last few percent and visulize our network's layer.
+It is our main role but we use Github for check each other's code, surveyed paper and so on.
 Our whole project progress will be logged by git.
 
 \section{Problem}
 
-In this project, we would like to challenge previous ImageNet Large Scale Visual Recognition Challenge(ILSVRC) 2014 competition by using deep learning techniques.
-The ILSVRC is a benchmark in object category classification and detection on hundreds of object categories and millions of images and This competition is one of the largest and the most challenging computer vision challenge.
-In this competition, there were 3 tasks which are (1) image classification, (2) singe-object localization, and (3) several objects detection.
+% 1??? ???? ?? ?????.
+And as we introduced above, ILSVRC 2014 competition set 3 problems: (1) image classification, (2) singe-object localization, and (3) several objects detection.
+% In this project, we would like to challenge previous ImageNet Large Scale Visual Recognition Challenge(ILSVRC) 2014 competition by using deep learning techniques.
+% The ILSVRC is a benchmark in object category classification and detection on hundreds of object categories and millions of images.
+% And this competition is one of the largest and the most challenging computer vision challenge.
+% In this competition, there were 3 tasks which were (1) image classification, (2) singe-object localization, and (3) several objects detection.
 In Image classification task, there are training data, the subset of ImageNet containing the 1000 categories and 1.2 million images.
 And we have to suggest algorithms which produce a list of object categories present in the image.
 The single-object localization task is to evaluate the ability of algorithms to learn the appearance of the target object itself rather than its image context.
-And training data for the single-object detection consists of same photographs collected for image classification task but it is hand labeled with the precense of one of 1000 object categories.
+And training data for the single-object detection consists of same photographs collected for image classification task but it is hand labeled with the presence of one of 1000 object categories.
 In our project, we will target (1) image classification and (2) single-object localization tasks.
 We hope to implement various ConvNet models for first task and use various CV techniques for second tasks.
 
@@ -123,11 +125,11 @@ Above equation means The predicted bounding box overlaps over 50\% with the grou
 \section{Demo}
 
 Deep learning have powerful classification accuracy when it is trained by ImageNet.
-So we decided to apply our results to a new web application which recommands a bunch of related images from user's image.
-When user upload their own image, the application will extract some keywords from the image based on our model.
+So we decided to apply our results to a new web application which recommends a bunch of related images from user's image.
+When user upload their own image, the application will extract top-5 keywords automatically from the image based on our model.
 By using that keywords and graph data structure, we will find out what kinds of images are related to the keywords.
-And then instead of just searching images of 'moon', the app recommand you other related images like sky, stars, or something.
-Consequantially, we could prepare to take for new small image search engine based on image.
+For example, instead of just searching images of 'moon', the app can recommend you more related images like sky, stars, or something.
+Consequentially, we could prepare to take for new small image search engine based on image input.
 
 \section{References}
 
