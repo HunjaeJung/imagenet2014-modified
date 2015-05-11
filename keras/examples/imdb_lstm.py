@@ -14,16 +14,16 @@ from keras.datasets import imdb
 '''
     Train a LSTM on the IMDB sentiment classification task.
 
-    The dataset is actually too small for LSTM to be of any advantage 
+    The dataset is actually too small for LSTM to be of any advantage
     compared to simpler, much faster methods such as TF-IDF+LogReg.
 
-    Notes: 
+    Notes:
 
-    - RNNs are tricky. Choice of batch size is important, 
-    choice of loss and optimizer is critical, etc. 
+    - RNNs are tricky. Choice of batch size is important,
+    choice of loss and optimizer is critical, etc.
     Most configurations won't converge.
 
-    - LSTM loss decrease during training can be quite different 
+    - LSTM loss decrease during training can be quite different
     from what you see with CNNs/MLPs/etc. It's more or less a sigmoid
     instead of an inverse exponential.
 
@@ -33,12 +33,12 @@ from keras.datasets import imdb
     250s/epoch on GPU (GT 650M), vs. 400s/epoch on CPU (2.4Ghz Core i7).
 '''
 
-max_features=20000
 maxlen = 100 # cut texts after this number of words (among top max_features most common words)
 batch_size = 16
 
 print("Loading data...")
 (X_train, y_train), (X_test, y_test) = imdb.load_data(nb_words=max_features, test_split=0.2)
+
 print(len(X_train), 'train sequences')
 print(len(X_test), 'test sequences')
 

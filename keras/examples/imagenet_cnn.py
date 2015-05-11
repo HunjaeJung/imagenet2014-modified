@@ -1,7 +1,10 @@
-
-from __future__ import absolute_import
+# -*- coding: utf-8 -*-
 from __future__ import print_function
-from keras.datasets import cifar10
+
+import sys
+sys.path.append('../')
+from IPython import embed; embed()
+from keras.datasets import tinyimagenet
 from keras.preprocessing.image import ImageDataGenerator
 from keras.models import Sequential
 from keras.layers.core import Dense, Dropout, Activation, Flatten
@@ -9,9 +12,10 @@ from keras.layers.convolutional import Convolution2D, MaxPooling2D
 from keras.optimizers import SGD, Adadelta, Adagrad
 from keras.utils import np_utils, generic_utils
 from six.moves import range
+import numpy as np
 
 '''
-    Train a (fairly simple) deep CNN on the CIFAR10 small images dataset.
+    Train a (fairly simple) deep CNN on the ImageNet! small images dataset.
     GPU run command:
         THEANO_FLAGS=mode=FAST_RUN,device=gpu,floatX=float32 python cifar10_cnn.py
     It gets down to 0.65 test logloss in 25 epochs, and down to 0.55 after 50 epochs.
@@ -22,12 +26,22 @@ from six.moves import range
 '''
 
 batch_size = 32
-nb_classes = 10
+nb_classes = 200
 nb_epoch = 200
 data_augmentation = True
 
-# the data, shuffled and split between tran and test sets
-(X_train, y_train), (X_test, y_test) = cifar10.load_data(test_split=0.1)
+# FIXME temporary use train set as test set
+(X_all, y_all), (dummy1, dummy2) = tinyimagenet.load_data('/shared/tiny-imagenet-200/')
+
+np.random.seed(131)
+np.random.shuffle(X_all)
+
+X_train = X[:90000]
+y_train = y[:90000]
+
+X_test = X[90000:]
+y_test = y[90000:]
+
 print(X_train.shape[0], 'train samples')
 print(X_test.shape[0], 'test samples')
 
