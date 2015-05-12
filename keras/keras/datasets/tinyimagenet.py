@@ -41,10 +41,15 @@ def load_data(path):
     val_size = 10000
     test_size = 10000
 
+    # for training data set
     X_train = np.zeros((train_size, 3, 64, 64), dtype="uint8")
-    y_train = np.zeros((train_size,), dtype="str")
-    X_val = np.zeros((val_size, 3, 64, 64), dtype="uint8") # TODO
-    y_val = np.zeros((val_size,), dtype="str")
+    # y_train = np.zeros((train_size,), dtype="str")
+    y_train = np.chararray((train_size,), itemsize=10)
+
+    # for validation data set
+    X_val = np.zeros((val_size, 3, 64, 64), dtype="uint8")
+    # y_val = np.zeros((val_size,), dtype="str")
+    y_val = np.chararray((val_size,), itemsize=10)
 
     #path_train = os.path.join(path, 'train')
     #path_val = os.path.join(path, 'val')
@@ -87,6 +92,10 @@ def load_data(path):
     le = LabelEncoder()
     y_val = le.fit_transform(y_val)
 
+    # print(X_train)
+    # print(X_val)
+    # print(y_train)
+    # print(y_val)
     return (X_train, y_train), (X_val, y_val)
 
 
