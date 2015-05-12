@@ -1,9 +1,7 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function
 
 import sys
 sys.path.append('../')
-from IPython import embed; embed()
 from keras.datasets import tinyimagenet
 from keras.preprocessing.image import ImageDataGenerator
 from keras.models import Sequential
@@ -15,11 +13,14 @@ from six.moves import range
 import numpy as np
 
 '''
-    Train a (fairly simple) deep CNN on the ImageNet! small images dataset.
+    Train a (fairly simple) deep CNN on the CIFAR10 small images dataset.
+
     GPU run command:
         THEANO_FLAGS=mode=FAST_RUN,device=gpu,floatX=float32 python cifar10_cnn.py
+
     It gets down to 0.65 test logloss in 25 epochs, and down to 0.55 after 50 epochs.
     (it's still underfitting at that point, though).
+
     Note: the data was pickled with Python 2, and some encoding issues might prevent you
     from loading it in Python 3. You might have to load it in Python 2,
     save it in a different format, load it in Python 3 and repickle it.
@@ -28,22 +29,23 @@ import numpy as np
 batch_size = 32
 nb_classes = 200
 nb_epoch = 200
-data_augmentation = True
+data_augmentation = False
 
-# FIXME temporary use train set as test set
-(X_all, y_all), (dummy1, dummy2) = tinyimagenet.load_data('/shared/tiny-imagenet-200/')
-
-np.random.seed(131)
-np.random.shuffle(X_all)
-
-X_train = X[:90000]
-y_train = y[:90000]
-
-X_test = X[90000:]
-y_test = y[90000:]
-
+# the data, shuffled and split between tran and test sets
+# FIXME {
+(X_train, y_train), (d1, d2) = tinyimagenet.load_data('/shared/tiny-imagenet-200/')
+np.random.seed(100)
+np.random.shuffle(X_train)
+np.random.seed(100)
+np.random.shuffle(y_train)
+X_test = X_train[90000:]
+y_test = y_train[90000:]
+X_train = X_train[:90000]
+y_train = y_train[:90000]
+print(X_train.shape, 'train shape')
 print(X_train.shape[0], 'train samples')
 print(X_test.shape[0], 'test samples')
+#}
 
 # convert class vectors to binary class matrices
 Y_train = np_utils.to_categorical(y_train, nb_classes)
@@ -51,22 +53,24 @@ Y_test = np_utils.to_categorical(y_test, nb_classes)
 
 model = Sequential()
 
-model.add(Convolution2D(32, 3, 3, 3, border_mode='full'))
+nkerns = [3, 32, 32, 64, 64]
+# (32, 3, 3, 3) only define kernel(filter) size
+model.add(Convolution2D(nkerns[1], nkerns[0], 3, 3, border_mode='full'))
 model.add(Activation('relu'))
-model.add(Convolution2D(32, 32, 3, 3))
+model.add(Convolution2D(nkerns[2], nkerns[1], 3, 3))
 model.add(Activation('relu'))
 model.add(MaxPooling2D(poolsize=(2, 2)))
 model.add(Dropout(0.25))
 
-model.add(Convolution2D(64, 32, 3, 3, border_mode='full'))
+model.add(Convolution2D(nkerns[3], nkerns[2], 3, 3, border_mode='full'))
 model.add(Activation('relu'))
-model.add(Convolution2D(64, 64, 3, 3))
+model.add(Convolution2D(nkerns[4], nkerns[3], 3, 3))
 model.add(Activation('relu'))
 model.add(MaxPooling2D(poolsize=(2, 2)))
 model.add(Dropout(0.25))
 
 model.add(Flatten())
-model.add(Dense(64*8*8, 512, init='normal'))
+model.add(Dense(nkerns[4]*16*16, 512, init='normal'))
 model.add(Activation('relu'))
 model.add(Dropout(0.5))
 
@@ -117,3 +121,19 @@ else:
         progbar = generic_utils.Progbar(X_train.shape[0])
         for X_batch, Y_batch in datagen.flow(X_train, Y_train):
             loss = model.train(X_batch, Y_batch)
+            progbar.add(X_batch.shape[0], values=[("train loss", loss)])
+
+        print("Testing...")
+        # test time!
+        progbar = generic_utils.Progbar(X_test.shape[0])
+        for X_batch, Y_batch in datagen.flow(X_test, Y_test):
+            score = model.test(X_batch, Y_batch)
+            progbar.add(X_batch.shape[0], values=[("test loss", score)])
+
+
+
+
+
+
+
+

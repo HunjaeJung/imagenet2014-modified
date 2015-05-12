@@ -1,6 +1,8 @@
-
-from __future__ import absolute_import
+# -*- coding: utf-8 -*-
 from __future__ import print_function
+
+import sys
+sys.path.append('../')
 from keras.datasets import cifar10
 from keras.preprocessing.image import ImageDataGenerator
 from keras.models import Sequential
@@ -12,10 +14,13 @@ from six.moves import range
 
 '''
     Train a (fairly simple) deep CNN on the CIFAR10 small images dataset.
+
     GPU run command:
         THEANO_FLAGS=mode=FAST_RUN,device=gpu,floatX=float32 python cifar10_cnn.py
+
     It gets down to 0.65 test logloss in 25 epochs, and down to 0.55 after 50 epochs.
     (it's still underfitting at that point, though).
+
     Note: the data was pickled with Python 2, and some encoding issues might prevent you
     from loading it in Python 3. You might have to load it in Python 2,
     save it in a different format, load it in Python 3 and repickle it.
@@ -103,3 +108,19 @@ else:
         progbar = generic_utils.Progbar(X_train.shape[0])
         for X_batch, Y_batch in datagen.flow(X_train, Y_train):
             loss = model.train(X_batch, Y_batch)
+            progbar.add(X_batch.shape[0], values=[("train loss", loss)])
+
+        print("Testing...")
+        # test time!
+        progbar = generic_utils.Progbar(X_test.shape[0])
+        for X_batch, Y_batch in datagen.flow(X_test, Y_test):
+            score = model.test(X_batch, Y_batch)
+            progbar.add(X_batch.shape[0], values=[("test loss", score)])
+
+
+
+
+
+
+
+
