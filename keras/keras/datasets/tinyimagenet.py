@@ -5,18 +5,32 @@ from skimage import data
 from sklearn.preprocessing import LabelEncoder
 import numpy as np
 
-def read_files(path):
+def read_files(dir, dataset):
     """
     yield data_type(train? val? test?), numpy.ndarray('uint8')
     """
-    for root, dir_names, file_names in os.walk(path):
-        for path in dir_names:
-            read_files(os.path.join(root, path))
-        for file_name in file_names:
-            file_path = os.path.join(root, file_name)
-            if not '.txt' in file_name:
-                label = file_name.split("_")[0]
-                yield label, data.imread(file_path)
+    dir_path = os.path.join(dir,dataset)
+    if dataset=='train':
+        for(root, dirs, files) in os.walk(dir_path):
+            for file in files:
+                if not '.txt' in file:
+                    label = file.split("_")[0]
+                    img_filepath = os.path.join(root,file)
+                    yield label, data.imread(img_filepath)
+    elif dataset=='val':
+        for(root, dirs, files) in os.walk(dir_path):
+            for file in files:
+                if '.txt' in file:
+                    # this is val_annotaions.txt
+                    f = open(os.path.join(root,file), 'r')
+                    while 1:
+                        line = f.readline()
+                        if not line: break
+                        line_seg = line.split()
+                        img_filepath = os.path.join(root,'images',line_seg[0])
+                        label = line_seg[1]
+                        yield label, data.imread(img_filepath)
+                    f.close()
 
 def load_data(path):
     """
@@ -27,16 +41,16 @@ def load_data(path):
     val_size = 10000
     test_size = 10000
 
-    print "loading data..."
     X_train = np.zeros((train_size, 3, 64, 64), dtype="uint8")
     y_train = np.zeros((train_size,), dtype="str")
     X_val = np.zeros((val_size, 3, 64, 64), dtype="uint8") # TODO
     y_val = np.zeros((val_size,), dtype="str")
 
-    path_train = os.path.join(path, 'train')
-    path_val = os.path.join(path, 'val')
+    #path_train = os.path.join(path, 'train')
+    #path_val = os.path.join(path, 'val')
 
-    for idx, (label, img) in enumerate(read_files(path_train)):
+    print "load training data..."
+    for idx, (label, img) in enumerate(read_files(path,'train')):
         # reshape (64, 64, 3) -> (3, 64, 64)
         # gray color image is combined ... e.g. n04366367_182.JPEG
         # Grey-scale means that all values have the same intensity. Set all channels
@@ -54,8 +68,8 @@ def load_data(path):
     le = LabelEncoder()
     y_train = le.fit_transform(y_train)
 
-    #TODO load validation set from tiny-imagenet
-    for idx, (label, img) in enumerate(read_files(path_val)):
+    print "load validation data..."
+    for idx, (label, img) in enumerate(read_files(path,'val')):
         # reshape (64, 64, 3) -> (3, 64, 64)
         # gray color image is combined ... e.g. n04366367_182.JPEG
         # Grey-scale means that all values have the same intensity. Set all channels
