@@ -95,7 +95,7 @@ def load_data(path):
 
 
 def test_load_data():
-    load_data('/shared/tiny-imagenet-200/')
+    load_data('../../data/tiny-imagenet-200/')
 
 
 if __name__ == '__main__':

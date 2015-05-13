@@ -81,7 +81,6 @@ try:
         X_test /= 255
         model.fit(X_train, Y_train, batch_size=batch_size, nb_epoch=10)
         score = model.evaluate(X_test, Y_test, batch_size=batch_size)
-
         classes = model.predict_classes(X_test, batch_size=batch_size)
         acc = np_utils.accuracy(classes, y_test)
 
@@ -147,5 +146,4 @@ try:
                 progbar.add(X_batch.shape[0], values=[("test loss", score)])
 except Exception as e:
     noti_utils.notify("There are some error!, Try FIx it now", e)
-
 
