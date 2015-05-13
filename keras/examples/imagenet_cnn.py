@@ -8,11 +8,10 @@ from keras.models import Sequential
 from keras.layers.core import Dense, Dropout, Activation, Flatten
 from keras.layers.convolutional import Convolution2D, MaxPooling2D
 from keras.optimizers import SGD, Adadelta, Adagrad
-from keras.utils import np_utils, generic_utils, noti_utils
+from keras.utils import np_utils, generic_utils, noti_utils, log_utils
 from six.moves import range
 import numpy as np
 import time
-from datetime import datetime
 
 '''
     Train a (fairly simple) deep CNN on the CIFAR10 small images dataset.
@@ -90,23 +89,25 @@ try:
         print label_encoder.inverse_transform(classes)
 
         running_time = time.time() - start_time
-        run_datetime = datetime.now().strftime("%m/%d/%Y %H:%M:%S"),
-        param_config = [run_datetime,
-                        'tiny imageNet',    # tiny or imageNet
-                        len(X_train),       # num of training data
-                        'tiny-imagenet-200/val',   # test set
-                        len(X_test),       # num of test set
-                        score,              # score
-                        running_time,
-                        4,                  # num of conv layer
-                        2,
-                        batch_size,
-                        10000000000,
-                        10
+        data_config =  ['tiny imageNet',
+                        len(X_train),   # num of training data
+                        'tiny-imagenet-200/val',
+                        len(X_test),    # num of test set
                         ]
-        result_str = "im dummmmmmmmmmmmmmmmmmmmyyyy"
 
-        noti_utils.notify('Done : ', running_time, ' sec, Score = ', score)
+        network_config = [4,              # num of conv layer
+                        2,              # num of max pooling
+                        batch_size,     # batch size
+                        10000000000,    # num of weights
+                        10              # epoch
+                        ]
+
+        result_str = "im dummmyyyy"
+        exp_result = [score, running_time, result_str]
+
+        log_utils.write_log(data_config, exp_result,network_config)
+
+        noti_utils.notify('Done')
     else:
         print("Using real time data augmentation")
 
