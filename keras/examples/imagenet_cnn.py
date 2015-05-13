@@ -32,20 +32,7 @@ nb_epoch = 200
 data_augmentation = False
 
 # the data, shuffled and split between tran and test sets
-# FIXME {
-(X_train, y_train), (d1, d2) = tinyimagenet.load_data('/shared/tiny-imagenet-200/')
-np.random.seed(100)
-np.random.shuffle(X_train)
-np.random.seed(100)
-np.random.shuffle(y_train)
-X_test = X_train[90000:]
-y_test = y_train[90000:]
-X_train = X_train[:90000]
-y_train = y_train[:90000]
-print(X_train.shape, 'train shape')
-print(X_train.shape[0], 'train samples')
-print(X_test.shape[0], 'test samples')
-#}
+label_encoder, (X_train, y_train), (X_test, y_test) = tinyimagenet.load_data('../../data/tiny-imagenet-200/')
 
 # convert class vectors to binary class matrices
 Y_train = np_utils.to_categorical(y_train, nb_classes)
@@ -90,7 +77,11 @@ if not data_augmentation:
     X_test /= 255
     model.fit(X_train, Y_train, batch_size=batch_size, nb_epoch=10)
     score = model.evaluate(X_test, Y_test, batch_size=batch_size)
+    classes = model.predict_classes(X_test, batch_size=batch_size)
+    acc = np_utils.accuracy(classes, y_test)
     print('Test score:', score)
+    print('Test accuracy:', acc)
+    print label_encoder.inverse_transform(classes)
 
 else:
     print("Using real time data augmentation")
@@ -129,11 +120,4 @@ else:
         for X_batch, Y_batch in datagen.flow(X_test, Y_test):
             score = model.test(X_batch, Y_batch)
             progbar.add(X_batch.shape[0], values=[("test loss", score)])
-
-
-
-
-
-
-
 
