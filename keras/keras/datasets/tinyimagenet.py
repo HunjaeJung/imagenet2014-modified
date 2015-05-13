@@ -89,14 +89,9 @@ def load_data(path):
 
     # change text label(n04366367, ...) to (0, 1, 2, ...)
     print "encoding labels for validation data..."
-    le = LabelEncoder()
-    y_val = le.fit_transform(y_val)
+    y_val = le.transform(y_val.tolist())
 
-    # print(X_train)
-    # print(X_val)
-    # print(y_train)
-    # print(y_val)
-    return (X_train, y_train), (X_val, y_val)
+    return le, (X_train, y_train), (X_val, y_val)
 
 
 def test_load_data():

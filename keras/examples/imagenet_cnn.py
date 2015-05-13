@@ -12,7 +12,7 @@ from keras.utils import np_utils, generic_utils, noti_utils
 from six.moves import range
 import numpy as np
 import time
-import datetime from datetime
+from datetime import datetime
 
 '''
     Train a (fairly simple) deep CNN on the CIFAR10 small images dataset.
@@ -34,21 +34,7 @@ nb_epoch = 200
 data_augmentation = False
 
 # the data, shuffled and split between tran and test sets
-# FIXME {
-(X_train, y_train), (X_test, y_test) = tinyimagenet.load_data('/shared/tiny-imagenet-200/')
-dataType = 'tiny'
-#np.random.seed(100)
-#np.random.shuffle(X_train)
-#np.random.seed(100)
-#np.random.shuffle(y_train)
-#X_test = X_train[90000:]
-#y_test = y_train[90000:]
-#X_train = X_train[:90000]
-#y_train = y_train[:90000]
-#print(X_train.shape, 'train shape')
-#print(X_train.shape[0], 'train samples')
-#print(X_test.shape[0], 'test samples')
-#}
+label_encoder, (X_train, y_train), (X_test, y_test) = tinyimagenet.load_data('/shared/tiny-imagenet-200/')
 
 # convert class vectors to binary class matrices
 Y_train = np_utils.to_categorical(y_train, nb_classes)
@@ -65,12 +51,12 @@ model.add(Activation('relu'))
 model.add(MaxPooling2D(poolsize=(2, 2)))
 model.add(Dropout(0.25))
 
-model.add(convolution2d(nkerns[3], nkerns[2], 3, 3, border_mode='full'))
-model.add(activation('relu'))
-model.add(convolution2d(nkerns[4], nkerns[3], 3, 3))
-model.add(activation('relu'))
-model.add(maxpooling2d(poolsize=(2, 2)))
-model.add(dropout(0.25))
+model.add(Convolution2D(nkerns[3], nkerns[2], 3, 3, border_mode='full'))
+model.add(Activation('relu'))
+model.add(Convolution2D(nkerns[4], nkerns[3], 3, 3))
+model.add(Activation('relu'))
+model.add(MaxPooling2D(poolsize=(2, 2)))
+model.add(Dropout(0.25))
 
 model.add(Flatten())
 model.add(Dense(nkerns[4]*16*16, 512, init='normal'))
@@ -81,7 +67,7 @@ model.add(Dense(512, nb_classes, init='normal'))
 model.add(Activation('softmax'))
 
 try:
-# let's train the model using SGD + momentum (how original).
+    # let's train the model using SGD + momentum (how original).
     sgd = SGD(lr=0.01, decay=1e-6, momentum=0.9, nesterov=True)
     model.compile(loss='categorical_crossentropy', optimizer=sgd)
 
@@ -95,7 +81,14 @@ try:
         X_test /= 255
         model.fit(X_train, Y_train, batch_size=batch_size, nb_epoch=10)
         score = model.evaluate(X_test, Y_test, batch_size=batch_size)
+
+        classes = model.predict_classes(X_test, batch_size=batch_size)
+        acc = np_utils.accuracy(classes, y_test)
+
         print('Test score:', score)
+        print('Test accuracy:', acc)
+
+        print label_encoder.inverse_transform(classes)
 
         running_time = time.time() - start_time
         run_datetime = datetime.now().strftime("%m/%d/%Y %H:%M:%S"),
@@ -109,18 +102,12 @@ try:
                         4,                  # num of conv layer
                         2,
                         batch_size,
-                        num_weight,
+                        10000000000,
                         10
                         ]
         result_str = "im dummmmmmmmmmmmmmmmmmmmyyyy"
 
         noti_utils.notify('Done : ', running_time, ' sec, Score = ', score)
-                    , ' sec, Score = ', score)
-                          , ' sec, Score = ', score)
-
-        f = open('
-
-
     else:
         print("Using real time data augmentation")
 
@@ -160,4 +147,5 @@ try:
                 progbar.add(X_batch.shape[0], values=[("test loss", score)])
 except Exception as e:
     noti_utils.notify("There are some error!, Try FIx it now", e)
+
 
