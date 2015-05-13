@@ -9,8 +9,8 @@ def notify(*msg):
         conn = httplib.HTTPSConnection("api.pushover.net:443")
         conn.request("POST", "/1/messages.json",
           urllib.urlencode({
-            "token": "a13cfpBJn78CCN6Qz5UhDzCEAFcSE9",
-            "user": "uHnR1kmckN2CKQdFi5NBVYDcsFC1A6",
+            "token": "advkFktt8upC1fWpjVcv115Fb1KYnd",
+            "user": "gzFsyqGs2Xf6H28tkZEQCVMyHXWWdi",
             "message": msg,
             "timestamp": int(time.time())
           }), { "Content-type": "application/x-www-form-urlencoded" })
