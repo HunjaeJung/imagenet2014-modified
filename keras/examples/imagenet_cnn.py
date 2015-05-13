@@ -8,7 +8,7 @@ from keras.models import Sequential
 from keras.layers.core import Dense, Dropout, Activation, Flatten
 from keras.layers.convolutional import Convolution2D, MaxPooling2D
 from keras.optimizers import SGD, Adadelta, Adagrad
-from keras.utils import np_utils, generic_utils
+from keras.utils import np_utils, generic_utils, noti_utils
 from six.moves import range
 import numpy as np
 
@@ -16,7 +16,7 @@ import numpy as np
     Train a (fairly simple) deep CNN on the CIFAR10 small images dataset.
 
     GPU run command:
-        THEANO_FLAGS=mode=FAST_RUN,device=gpu,floatX=float32 python cifar10_cnn.py
+        THEANO_FLAGS=mode=FAST_RUN,device=gpu,floatX=float32 python imagenet_cnn.py
 
     It gets down to 0.65 test logloss in 25 epochs, and down to 0.55 after 50 epochs.
     (it's still underfitting at that point, though).
@@ -33,18 +33,18 @@ data_augmentation = False
 
 # the data, shuffled and split between tran and test sets
 # FIXME {
-(X_train, y_train), (d1, d2) = tinyimagenet.load_data('/shared/tiny-imagenet-200/')
-np.random.seed(100)
-np.random.shuffle(X_train)
-np.random.seed(100)
-np.random.shuffle(y_train)
-X_test = X_train[90000:]
-y_test = y_train[90000:]
-X_train = X_train[:90000]
-y_train = y_train[:90000]
-print(X_train.shape, 'train shape')
-print(X_train.shape[0], 'train samples')
-print(X_test.shape[0], 'test samples')
+(X_train, y_train), (X_test, y_test) = tinyimagenet.load_data('/shared/tiny-imagenet-200/')
+#np.random.seed(100)
+#np.random.shuffle(X_train)
+#np.random.seed(100)
+#np.random.shuffle(y_train)
+#X_test = X_train[90000:]
+#y_test = y_train[90000:]
+#X_train = X_train[:90000]
+#y_train = y_train[:90000]
+#print(X_train.shape, 'train shape')
+#print(X_train.shape[0], 'train samples')
+#print(X_test.shape[0], 'test samples')
 #}
 
 # convert class vectors to binary class matrices
@@ -91,6 +91,7 @@ if not data_augmentation:
     model.fit(X_train, Y_train, batch_size=batch_size, nb_epoch=10)
     score = model.evaluate(X_test, Y_test, batch_size=batch_size)
     print('Test score:', score)
+    #noti_utils.notify('sdfdsf')
 
 else:
     print("Using real time data augmentation")
