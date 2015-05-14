@@ -29,7 +29,7 @@ import time
 
 batch_size = 32
 nb_classes = 200
-nb_epoch = 200
+nb_epoch = 20
 data_augmentation = False
 
 # the data, shuffled and split between tran and test sets
@@ -42,6 +42,7 @@ Y_test = np_utils.to_categorical(y_test, nb_classes)
 model = Sequential()
 
 nkerns = [3, 32, 32, 64, 64]
+nweigts = 0
 act_func = 'tanh'
 
 # (32, 3, 3, 3) only define kernel(filter) size
@@ -80,8 +81,8 @@ try:
         X_test = X_test.astype("float32")
         X_train /= 255
         X_test /= 255
-        model.fit(X_train, Y_train, batch_size=batch_size, nb_epoch=10)
-
+        history = model.fit(X_train, Y_train, batch_size=batch_size, nb_epoch=nb_epoch)
+        print history
         score = model.evaluate(X_test, Y_test, batch_size=batch_size)
         classes = model.predict_classes(X_test, batch_size=batch_size)
         acc = np_utils.accuracy(classes, y_test)
@@ -94,19 +95,17 @@ try:
                         len(X_test),    # num of test set
                         ]
 
-        network_config = [ act_func,    # activation funciton
-                        4,              # num of conv layer
-                        2,              # num of max pooling
-                        batch_size,     # batch size
-                        10000000000,    # num of weights
-                        10              # epoch
-                        ]
+        network_config = [act_func,    # activation funciton
+                          4,              # num of conv layer
+                          2,              # num of max pooling
+                          batch_size,     # batch size
+                          10000000000,    # num of weights
+                          10              # epoch
+                          ]
 
-        interim_result = "im dummmyyyy"
         exp_result = [score, acc, running_time]
-        internal_log = [interim_result] + label_result
 
-        log_utils.write_log(data_config, exp_result, network_config, internal_log)
+        log_utils.write_log(data_config, exp_result, network_config, history, label_result)
         noti_utils.notify('Done > score : ', score ,', accuracy : ', acc )
 
         print('Test score:', score)
