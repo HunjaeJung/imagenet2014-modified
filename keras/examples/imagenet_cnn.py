@@ -42,7 +42,7 @@ Y_test = np_utils.to_categorical(y_test, nb_classes)
 model = Sequential()
 
 nkerns = [3, 32, 32, 64, 64]
-act_func = 'relu'
+act_func = 'tanh'
 
 # (32, 3, 3, 3) only define kernel(filter) size
 model.add(Convolution2D(nkerns[1], nkerns[0], 3, 3, border_mode='full'))
