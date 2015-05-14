@@ -42,24 +42,26 @@ Y_test = np_utils.to_categorical(y_test, nb_classes)
 model = Sequential()
 
 nkerns = [3, 32, 32, 64, 64]
+act_func = 'relu'
+
 # (32, 3, 3, 3) only define kernel(filter) size
 model.add(Convolution2D(nkerns[1], nkerns[0], 3, 3, border_mode='full'))
-model.add(Activation('relu'))
+model.add(Activation(act_func))
 model.add(Convolution2D(nkerns[2], nkerns[1], 3, 3))
-model.add(Activation('relu'))
+model.add(Activation(act_func))
 model.add(MaxPooling2D(poolsize=(2, 2)))
 model.add(Dropout(0.25))
 
 model.add(Convolution2D(nkerns[3], nkerns[2], 3, 3, border_mode='full'))
-model.add(Activation('relu'))
+model.add(Activation(act_func))
 model.add(Convolution2D(nkerns[4], nkerns[3], 3, 3))
-model.add(Activation('relu'))
+model.add(Activation(act_func))
 model.add(MaxPooling2D(poolsize=(2, 2)))
 model.add(Dropout(0.25))
 
 model.add(Flatten())
 model.add(Dense(nkerns[4]*16*16, 512, init='normal'))
-model.add(Activation('relu'))
+model.add(Activation(act_func))
 model.add(Dropout(0.5))
 
 model.add(Dense(512, nb_classes, init='normal'))
@@ -79,35 +81,37 @@ try:
         X_train /= 255
         X_test /= 255
         model.fit(X_train, Y_train, batch_size=batch_size, nb_epoch=10)
+
         score = model.evaluate(X_test, Y_test, batch_size=batch_size)
         classes = model.predict_classes(X_test, batch_size=batch_size)
         acc = np_utils.accuracy(classes, y_test)
-
-        print('Test score:', score)
-        print('Test accuracy:', acc)
-
-        print label_encoder.inverse_transform(classes)
-
+        label_result = label_encoder.inverse_transform(classes)
         running_time = time.time() - start_time
+
         data_config =  ['tiny imageNet',
                         len(X_train),   # num of training data
                         'tiny-imagenet-200/val',
                         len(X_test),    # num of test set
                         ]
 
-        network_config = [4,              # num of conv layer
+        network_config = [ act_func,    # activation funciton
+                        4,              # num of conv layer
                         2,              # num of max pooling
                         batch_size,     # batch size
                         10000000000,    # num of weights
                         10              # epoch
                         ]
 
-        result_str = "im dummmyyyy"
-        exp_result = [score, running_time, result_str]
+        interim_result = "im dummmyyyy"
+        exp_result = [score, acc, running_time]
+        internal_log = [interim_result] + label_result
 
-        log_utils.write_log(data_config, exp_result,network_config)
+        log_utils.write_log(data_config, exp_result, network_config, internal_log)
+        noti_utils.notify('Done > score : ', score ,', accuracy : ', acc )
 
-        noti_utils.notify('Done')
+        print('Test score:', score)
+        print('Test accuracy:', acc)
+        print label_result
     else:
         print("Using real time data augmentation")
 
