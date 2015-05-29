@@ -1,0 +1,80 @@
+2015-05-24 21:54:34
+
+./build/tools/caffe train -solver models/finetune_flickr_style/our_solver1.prototxt -weights models/bvlc_reference_caffenet/bvlc_reference_caffenet.caffemodel -gpu 0
+
+Iteration 20000, Testing net (#0)
+    Test net output #0: accuracy = 0.3526
+
+ Snapshotting to models/our1/finetune_flickr_style_iter_30000.caffemodel
+ Snapshotting solver state to models/our1/finetune_flickr_style_iter_30000.solverstate
+ Iteration 30000, Testing net (#0)
+     Test net output #0: accuracy = 0.374
+
+Iteration 30000, loss = 0.65943
+Iteration 30000, lr = 0.0001
+Iteration 30020, loss = 0.924196
+Iteration 30020, lr = 0.0001
+Iteration 30040, loss = 0.657277
+Iteration 30040, lr = 0.0001
+
+2015-05-24 21:54:40
+
+./build/tools/caffe train -solver models/our2/our_solver2.prototxt -gpu 0
+
+Snapshotting to models/our2/finetune_flickr_style_iter_30000.caffemodel
+Snapshotting solver state to models/our2/finetune_flickr_style_iter_30000.solverstate
+Iteration 30000, Testing net (#0)
+    Test net output #0: accuracy = 0.0498
+Iteration 30000, loss = 2.99526
+Iteration 30000, lr = 0.0001
+Iteration 30020, loss = 2.99658
+Iteration 30020, lr = 0.0001
+Iteration 30040, loss = 2.99634
+
+I0525 04:24:20.384366  1269 solver.cpp:334] Snapshotting to models/our2/finetune_flickr_style_iter_31001.caffemodel
+I0525 04:24:21.104727  1269 solver.cpp:342] Snapshotting solver state to models/our2/finetune_flickr_style_iter_31001.solverstate
+I0525 04:24:21.457203  1269 solver.cpp:248] Iteration 31000, loss = 2.99406
+I0525 04:24:21.457236  1269 solver.cpp:266] Iteration 31000, Testing net (#0)
+I0525 04:24:36.724586  1269 solver.cpp:315]     Test net output #0: accuracy = 0.0488
+I0525 04:24:36.724715  1269 solver.cpp:253] Optimization Done.
+
+2015-05-25 04:25:07
+
+./build/tools/caffe train -solver models/our3/our_solver3.prototxt -weights models/bvlc_reference_caffenet/bvlc_reference_caffenet.caffemodel -gpu 0
+
+Snapshotting to models/our3/our3_flickr_style_iter_10000.caffemodel
+Snapshotting solver state to models/our3/our3_flickr_style_iter_10000.solverstate
+Iteration 10000, Testing net (#0)
+ Test net output #0: accuracy = 0.0522
+Iteration 10000, loss = 2.03346
+Iteration 10000, lr = 0.001
+Iteration 10020, loss = 2.03234
+
+Iteration 19980, lr = 0.001
+Snapshotting to models/our3/our3_flickr_style_iter_20000.caffemodel
+Snapshotting solver state to models/our3/our3_flickr_style_iter_20000.solverstate                                                       │ 40
+ Iteration 20000, Testing net (#0)
+     Test net output #0: accuracy = 0.0468
+ Iteration 20000, loss = 2.03369
+ Iteration 20000, lr = 0.0001
+ Iteration 20020, loss = 2.05027
+ Iteration 20020, lr = 0.0001
+ Iteration 20040, loss = 2.03948
+ Iteration 20040, lr = 0.0001
+ Iteration 20060, loss = 2.02491
+ Iteration 20060, lr = 0.0001
+ Iteration 20080, loss = 2.01472
+
+Snapshotting to models/our3/our3_flickr_style_iter_30000.caffemodel                                                                     
+Snapshotting solver state to models/our3/our3_flickr_style_iter_30000.solverstate                                                       │ 38 I0525 04:24:36.724586  1269 solver.cpp:315]     Test net output #0: accuracy = 0.0488
+Iteration 30000, Testing net (#0)
+    Test net output #0: accuracy = 0.047
+
+
+2015-05-27 21:58:19
+
+./build/tools/caffe train -solver models/vgg16/solver.prototxt -weights models/vgg16/VGG_ILSVRC_16_layers.caffemodel -gpu 0
+
+2015-05-28 00:52:10
+
+./build/tools/caffe train -solver models/Places_CNDS_models/solver.prototxt -weights models/Places_CNDS_models/8conv3fc_DSN.caffemodel -gpu 0
