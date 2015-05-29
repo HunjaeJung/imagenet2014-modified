@@ -107,7 +107,6 @@ def recommender(res):
     pred_obj = res["predict_obj"]
     pred_sty = res["predict_style"]
 
-
     # make matrix and normalize it to find good answers
     pred_objcol = np.ones((5,1))
     pred_styrow = np.ones((1,5))
@@ -116,7 +115,9 @@ def recommender(res):
         pred_styrow[0][i] = float(pred_sty[i]["score"])*STYLE_WEIGHT[i]
 
     mat = np.dot(pred_objcol, pred_styrow)  # 5 by 5 matrix
-    mat = mat/mat.flatten().sum()           # normalize it
+    sum = mat.flatten().sum()
+    if sum != 0:
+        mat = mat/mat.flatten().sum()           # normalize it
     mat_flat = mat.flatten()                # flatten it
     idxs = np.argsort(mat_flat)             # 0 to 24
 
@@ -124,7 +125,10 @@ def recommender(res):
     sum = 0
     for i in range(1, TOP_N+1):
         sum = sum + mat_flat[idxs[-i]]
-    top_mat = mat/sum
+
+    top_mat = mat
+    if sum != 0:
+        top_mat = top_mat/sum
 
     recom = []
     for i in range(1, TOP_N+1):
@@ -137,7 +141,6 @@ def recommender(res):
         print pred_obj[row_n]["name"],"(", pred_obj[row_n]["label"],")"
         # its score
         propo = top_mat[row_n][col_n]
-        print propo
 
         # count the number of images that will return
         num_return_imgs = 0
