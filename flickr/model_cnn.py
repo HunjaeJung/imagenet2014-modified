@@ -9,7 +9,7 @@ from keras.layers.core import Dense, Dropout, Activation, Flatten
 from keras.layers.convolutional import Convolution2D, MaxPooling2D
 from keras.optimizers import SGD
 from keras.utils import np_utils
-from six.moves import range
+#from six.moves import range
 import numpy as np
 import util
 import gc
@@ -51,20 +51,20 @@ def our_model():
     # Parameters
     train_batch_size = 3000
     test_batch_size = 3000
-    train_gpu_batch_size = 40  # it should divide train_batch_size
-    test_gpu_batch_size = 40
+    train_gpu_batch_size = 300  # it should divide train_batch_size
+    test_gpu_batch_size = 100
 
     ntrain = 63000
     ntest = 15000
     nb_epoch = 10
 
     # Data Load
-    flickr_train_set = np.loadtxt('/shared/flickr_style/train_resized.txt', str, delimiter='\t')
+    flickr_train_set = np.loadtxt('/home/shasta/caffe/data/flickr_style/train_resized.txt', str, delimiter='\t')
     flickr_train_set = flickr_train_set[:ntrain]
     flickr_train_set_path = [readline.split()[0] for readline in flickr_train_set]
     flickr_train_set_label = [int(readline.split()[1]) for readline in flickr_train_set]
 
-    flickr_test_set = np.loadtxt('/shared/flickr_style/test_resized.txt', str, delimiter='\t')
+    flickr_test_set = np.loadtxt('/home/shasta/caffe/data/flickr_style/test_resized.txt', str, delimiter='\t')
     flickr_test_set = flickr_test_set[:ntest]
     flickr_test_set_path = [readline.split()[0] for readline in flickr_test_set]
     flickr_test_set_label = [int(readline.split()[1]) for readline in flickr_test_set]
@@ -74,6 +74,7 @@ def our_model():
 
     # Model Define
     print "Model Compile Start..."
+    """
     model = Sequential()
 
     model.add(Convolution2D(32, 3, 3, 3, border_mode='full'))
@@ -96,6 +97,34 @@ def our_model():
     model.add(Dropout(0.5))
 
     model.add(Dense(512, 20, init='normal'))
+    model.add(Activation('softmax'))
+
+    # let's train the model using SGD + momentum (how original).
+    sgd = SGD(lr=0.001, decay=1e-6, momentum=0.9, nesterov=True)
+    model.compile(loss='categorical_crossentropy', optimizer=sgd)
+    """
+    model = Sequential()
+
+    model.add(Convolution2D(32, 3, 3, 3, border_mode='full'))
+    model.add(Activation('relu'))
+    model.add(Convolution2D(32, 32, 3, 3))
+    model.add(Activation('relu'))
+    model.add(MaxPooling2D(poolsize=(4, 4)))
+    model.add(Dropout(0.8))
+
+    model.add(Convolution2D(32, 32, 3, 3, border_mode='full'))
+    model.add(Activation('relu'))
+    model.add(Convolution2D(32, 32, 3, 3))
+    model.add(Activation('relu'))
+    model.add(MaxPooling2D(poolsize=(4, 4)))
+    model.add(Dropout(0.8))
+
+    model.add(Flatten())
+    model.add(Dense(32*16*16, 2048, init='normal'))
+    model.add(Activation('relu'))
+    model.add(Dropout(0.5))
+
+    model.add(Dense(2048, 20, init='normal'))
     model.add(Activation('softmax'))
 
     # let's train the model using SGD + momentum (how original).
@@ -122,7 +151,7 @@ def our_model():
         # Big Batch in Memory, small batch in GPU Memory
         for idx, X_train_batch in enumerate(batch_generator(flickr_train_set_path, batch_size=train_batch_size, max_iter=1)):
             Y_train_batch = Y_train[idx*train_batch_size:(idx+1)*train_batch_size]
-            for gpuidx in range(train_batch_size/train_gpu_batch_size):
+            for gpuidx in xrange(train_batch_size/train_gpu_batch_size):
                 #X_train_batch_gpu = X_train_batch[gpuidx*train_gpu_batch_size:(gpuidx+1)*train_gpu_batch_size]
                 #Y_train_batch_gpu = Y_train_batch[gpuidx*train_gpu_batch_size:(gpuidx+1)*train_gpu_batch_size]
                 loss, accuracy = model.train(X_train_batch[gpuidx*train_gpu_batch_size:(gpuidx+1)*train_gpu_batch_size], Y_train_batch[gpuidx*train_gpu_batch_size:(gpuidx+1)*train_gpu_batch_size], accuracy=True)
@@ -133,11 +162,13 @@ def our_model():
 
         for idx, X_test_batch in enumerate(batch_generator(flickr_test_set_path, batch_size=test_batch_size, max_iter=1)):
             Y_test_batch = Y_test[idx*test_batch_size:(idx+1)*test_batch_size]
-            for gpuidx in range(test_batch_size/test_gpu_batch_size):
+            loss = np.zeros((test_batch_size/test_gpu_batch_size,))
+            acc = np.zeros((test_batch_size/test_gpu_batch_size,))
+            for gpuidx in xrange(test_batch_size/test_gpu_batch_size):
                 #X_test_batch_gpu = X_test_batch[gpuidx*test_gpu_batch_size:(gpuidx+1)*test_gpu_batch_size]
                 #Y_test_batch_gpu = Y_test_batch[gpuidx*test_gpu_batch_size:(gpuidx+1)*test_gpu_batch_size]
-                loss, accuracy = model.test(X_test_batch[gpuidx*test_gpu_batch_size:(gpuidx+1)*test_gpu_batch_size], Y_test_batch[gpuidx*test_gpu_batch_size:(gpuidx+1)*test_gpu_batch_size], accuracy=True)
-                print "test,epoch,{},batch,{},gpubatch,{},testloss,{},testaccruacy@1,{}".format(e, idx, gpuidx, loss, accuracy)
+                loss[gpuidx], accuracy[acc] = model.test(X_test_batch[gpuidx*test_gpu_batch_size:(gpuidx+1)*test_gpu_batch_size], Y_test_batch[gpuidx*test_gpu_batch_size:(gpuidx+1)*test_gpu_batch_size], accuracy=True)
+            print "test,epoch,{},batch,{},gpubatch,{},testloss,{},testaccruacy@1,{}".format(e, idx, gpuidx, np.mean(loss), np.mean(accuracy))
             gc.collect()
         del X_test_batch
         del Y_test_batch
