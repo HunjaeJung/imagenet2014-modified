@@ -1,0 +1,53 @@
+<template name="Slider">
+    <!--Jeegle image slider start-->
+    <div class="body-background"></div>
+    <div class="body-background-wrapper"></div>
+
+    <div id="medal-id" class="achievement">
+      <div class="medal-container">
+        <div class="medal">
+          <div class="ring">
+            <div class="inner">
+              <span class="text"><small>achievement</small></span>
+              <span class="stars">* * *</span>
+              <strong class="text">Top - 1</strong>
+            </div>
+          </div>
+        </div>
+        <div class="ribbon">
+          <div class="l"></div>
+          <div class="r"></div>
+        </div>
+      </div>
+      <h1 class="ribbon">
+        <strong id="first-prize" class="ribbon-content"></strong>
+      </h1>
+    </div>
+    <div id="loading-spinner" class="loading-spinner"></div>
+
+      <div id="drag-info" class="drag-intro">Drag and drop your image here</div>
+      <div id="slider-box" class="slider-box hidden-xs">
+        {{> dropzone callbacks = imageUploaded multiple = false}}
+
+        <ul id="slider" class="slider">
+            {{#each images}}
+                <li name="image-div" data-num="{{index}}" class="image-div">
+                    <img name="images-in-belt" class="images-in-belts" data-image-title="{{data.imagePath}}" src="{{data.imageServer}}{{data.title}}"/>
+                    {{#if data.recFlag}}
+                    <div class="rec-img-desc-wrapper">
+                      <div class="rec-img-desc style">{{data.style}} - {{data.object}}</div>
+                      <div class="rec-img-desc score">({{data.score}})</div>
+                      <div class="rec-img-desc obj-score">{{data.obj_score}}</div>
+                    </div>
+                    {{/if}}
+                </li>
+            {{/each}}
+        </ul>
+
+        <a href="#" id="slider-btn-left" class="slider-btn control-next"></a>
+        <a href="#" id="slider-btn-right" class="slider-btn control-prev"></a>
+    </div>
+    <!--Jeegle image slider end-->
+
+</template>
+
