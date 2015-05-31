@@ -5,6 +5,7 @@ import pickle
 import skimage.io
 from skimage.feature import hog
 import util
+from skimage import data, color, exposure
 
 
 def get_gist_features(data_path, pickle_name):
@@ -65,7 +66,35 @@ def get_colorvariance_features(data_path, pickle_name):
 
     pickle.dump(var_features, open(pickle_name, 'wb'), protocol=2)
 
-def get_HOG_features():
+
+def get_HOG_features(data_path, pickle_name):
+    size = len(data_path)
+    rowPatchCnt = 4
+    colPatchCnt = 4
+    var_features = np.zeros((size, colPatchCnt*rowPatchCnt*3))
+    print var_features.shape
+
+    image = color.rgb2gray(data.astronaut())
+    #print image
+
+    fd, hog_image = hog(image, orientation = 8, pixels_per_cell=(16, 16), cells_per_block = (1,1), visualise=True)
+
+    print fd
+
+    im = util.load_image(data_path[0])
+    #print im
+    #for i in range(size):
+        #if i % 500 == 0: print "{}/{}".format(i, size)
+        #im = util.load_image(data_path[i])
+        #patchH = im.shape[0] / rowPatchCnt
+        #patchW = im.shape[1] / colPatchCnt
+        #pass
+        #im = np.array(im)
+
+    pass
+
+
+def get_SIFT_features(data_path, pickle_name):
     pass
 
 
@@ -83,5 +112,7 @@ if __name__ == '__main__':
     #get_gist_features(flickr_test_set_path, 'feat_gist_test.pickle')
     #get_colorhistogram_features(flickr_train_set_path, 'feat_color_train24.pickle', binsize=32)
     #get_colorhistogram_features(flickr_test_set_path, 'feat_color_test24.pickle', binsize=32)
-    get_colorvariance_features(flickr_train_set_path, 'feat_var_train.pickle')
-    get_colorvariance_features(flickr_test_set_path, 'feat_var_test.pickle')
+    get_HOG_features(flickr_train_set_path, 'feat_hog_train.pickle')
+    get_HOG_features(flickr_test_set_path, 'feat_hog_test.pickle')
+    #get_colorvariance_features(flickr_train_set_path, 'feat_var_train.pickle')
+    #get_colorvariance_features(flickr_test_set_path, 'feat_var_test.pickle')

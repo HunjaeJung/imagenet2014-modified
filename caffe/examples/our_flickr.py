@@ -8,13 +8,13 @@ import pickle
 
 caffe_root = '../'
 
+"""
 MODEL_FILE_STYLE = '../models/Places_CNDS_models/deploy.prototxt'
 PRETRAINED_STYLE = '../models/Places_CNDS_models/finetune_flickr_style_withplace_iter_5000.caffemodel'  # accuracy 0.38
-
 """
+
 MODEL_FILE_STYLE = '../models/finetune_flickr_style/deploy.prototxt'
 PRETRAINED_STYLE = '../models/finetune_flickr_style/finetune_flickr_style.caffemodel'
-"""
 
 MODEL_FILE_IMGNET = '../models/bvlc_reference_caffenet/deploy.prototxt'
 PRETRAINED_IMGNET = '../models/bvlc_reference_caffenet/bvlc_reference_caffenet.caffemodel'

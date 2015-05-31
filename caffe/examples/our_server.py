@@ -35,6 +35,7 @@ class FlickrServer(object):
         print "end predict"
         return json.dumps(res)
 
+
 if __name__ == '__main__':
     #test_model()
     cherrypy.config.update({'server.socket_port': 8080,
