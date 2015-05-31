@@ -8,15 +8,16 @@ import util
 from skimage import data, color, exposure
 
 
-def get_gist_features(data_path, pickle_name):
+def get_gist_features(data_path, pickle_name=None):
     size = len(data_path)
     gist_features = np.zeros((size, 960))
     for i in range(size):
         if i % 500 == 0: print "{}/{}".format(i, size)
         im = Image.open(data_path[i])
         gist_features[i, :] = leargist.color_gist(im)
-    pickle.dump(gist_features, open(pickle_name, 'wb'), protocol=2)
 
+    if pickle_name is not None:
+        pickle.dump(gist_features, open(pickle_name, 'wb'), protocol=2)
 
 def get_colorhistogram_features(data_path, pickle_name, binsize):
     size = len(data_path)

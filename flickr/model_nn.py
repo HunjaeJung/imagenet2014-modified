@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 import sys
 sys.path.append('../keras')
 
@@ -94,8 +93,8 @@ def NN_with_allfeat(epoch=20):
     X_test_varfeat = pickle.load(open('feat_var_test.pickle', 'rb'))
 
     # acc@1 0.3945
-    #X_train = np.hstack((X_train_convfeat, X_train_gistfeat, X_train_colorfeat, X_train_varfeat))
-    #X_test = np.hstack((X_test_convfeat, X_test_gistfeat, X_test_colorfeat, X_test_varfeat))
+    X_train = np.hstack((X_train_convfeat, X_train_gistfeat, X_train_colorfeat, X_train_varfeat))
+    X_test = np.hstack((X_test_convfeat, X_test_gistfeat, X_test_colorfeat, X_test_varfeat))
 
     # acc@1 0.3942
     #X_train = X_train_convfeat
@@ -106,8 +105,8 @@ def NN_with_allfeat(epoch=20):
     #X_test = np.hstack((X_test_convfeat, X_test_gistfeat))
 
     # acc@1 0.3941
-    X_train = np.hstack((X_train_convfeat, X_train_gistfeat, X_train_colorfeat))
-    X_test = np.hstack((X_test_convfeat, X_test_gistfeat, X_test_colorfeat))
+    #X_train = np.hstack((X_train_convfeat, X_train_gistfeat, X_train_colorfeat))
+    #X_test = np.hstack((X_test_convfeat, X_test_gistfeat, X_test_colorfeat))
 
     print "X_shape", X_train_convfeat.shape[1], X_train_gistfeat.shape[1], X_train_colorfeat.shape[1], X_train_varfeat.shape[1]
     Y_train = np_utils.to_categorical(flickr_train_set_label, nb_classes)
@@ -146,10 +145,10 @@ def NN_with_allfeat(epoch=20):
     print('Test score:', score[0])
     print('Test accuracy:', score[1])
 
-    model.save_weights('./model_weights.hdf5')
+    model.save_weights('./our_final_classifier.hdf5')
 
     model_loaded = create_model(X_train.shape[1])
-    model_loaded.load_weights('./model_weights.hdf5')
+    model_loaded.load_weights('./our_final_classifier.hdf5')
 
     model_loaded.compile(loss='categorical_crossentropy', optimizer=opt)
     score = model_loaded.evaluate(X_test, Y_test, show_accuracy=True, verbose=0)
