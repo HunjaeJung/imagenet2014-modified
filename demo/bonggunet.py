@@ -13,7 +13,7 @@ import gc
 
 caffe_root = '../caffe/'
 project_root = '../'
-style_dic = np.loadtxt(caffe_root + 'examples/finetune_flickr_style/style_names.txt', str, delimiter='\t')
+style_dic = np.loadtxt(caffe_root + 'data/flickr_style/style_names.txt', str, delimiter='\t')
 synset_dic = np.loadtxt(caffe_root + 'data/flickr_style/synset_words.txt', str, delimiter='\t')
 
 
@@ -176,6 +176,8 @@ def style_labeler():
     flickr_test_set = np.loadtxt(caffe_root + 'data/flickr_style/test.txt', str, delimiter='\t')
     flickr_test_set_path = [readline.split()[0] for readline in flickr_test_set]
     flickr_test_set_label = [int(readline.split()[1]) for readline in flickr_test_set]
+    flickr_test_set_path = flickr_test_set_path[:10000]
+    flickr_test_set_label = flickr_test_set_label[:10000]
 
     caffe.set_mode_gpu()
     our_model = BongguNet()
@@ -184,20 +186,22 @@ def style_labeler():
     our_res = []
     our_res5 = []
 
-    with open('./label_result_bonggunet.csv', 'w') as f:
-        for i in range(len(flickr_test_set_path)):
-            if i % 1000: gc.collect()
-            img = caffe.io.load_image(flickr_test_set_path[i])
-            res = our_model.predict_our(img)
+    #with open('./label_result_bonggunet_for_test.csv', 'w') as f:
+    for i in range(len(flickr_test_set_path)):
+        if i % 1000:
+            print i
+            gc.collect()
+        img = caffe.io.load_image(flickr_test_set_path[i])
+        res = our_model.predict_our(img)
 
-            our_res.append(res[0])
-            our_res5.append(res)
-            true_res.append(flickr_test_set_label[i])
-            print our_res, true_res
-            f.write(",".join([str(flickr_test_set_label[i]),
-                              flickr_test_set_path[i],
-                              str(true_res[i]),
-                              str(our_res[i])]) + "\n")
+        our_res.append(res[0])
+        our_res5.append(res)
+        true_res.append(flickr_test_set_label[i])
+        #print our_res, true_res
+        #f.write(",".join([str(flickr_test_set_label[i]),
+                            #flickr_test_set_path[i],
+                            #str(true_res[i]),
+                            #str(our_res[i])]) + "\n")
 
     print "accuarcy@1:", np.mean([a == b for a, b in zip(true_res, our_res)])
     print "accuarcy@5:", np.mean([a in b for a, b in zip(true_res, our_res5)])
